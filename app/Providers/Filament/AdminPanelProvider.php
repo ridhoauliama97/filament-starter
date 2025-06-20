@@ -74,7 +74,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -97,6 +97,9 @@ class AdminPanelProvider extends PanelProvider
             ->plugins(
                 $this->getPlugins()
             )
+            ->resources([
+                config('filament-logger.activity_resource')
+            ])
             ->databaseNotifications();
     }
 
@@ -104,7 +107,22 @@ class AdminPanelProvider extends PanelProvider
     {
         $plugins = [
             ThemesPlugin::make(),
-            FilamentShieldPlugin::make(),
+            FilamentShieldPlugin::make()
+                ->gridColumns([
+                    'default' => 1,
+                    'sm' => 2,
+                    'lg' => 3
+                ])
+                ->sectionColumnSpan(1)
+                ->checkboxListColumns([
+                    'default' => 1,
+                    'sm' => 2,
+                    'lg' => 4,
+                ])
+                ->resourceCheckboxListColumns([
+                    'default' => 1,
+                    'sm' => 2,
+                ]),
             ApiServicePlugin::make(),
             BreezyCore::make()
                 ->myProfile(
